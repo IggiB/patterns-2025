@@ -2,9 +2,9 @@
 
 Run the code
 ```bash
-node 
+node task1/func/index.js
 ```
 
 ```bash
-node 
+node task1/oop/index.js
 ```
