@@ -2,8 +2,6 @@
   "name": "patterns",
   "version": "1.0.0",
   "description": "Patterns 2025 Course",
-  "main": "index.js",
-  "type": "module",
   "scripts": {},
   "author": "IggiBi",
   "license": "MIT",

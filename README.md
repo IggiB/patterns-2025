@@ -2,7 +2,7 @@
 
 Run the code
 ```bash
-node task1/func.js
+node task1/func/index.js
 ```
 
 ```bash
