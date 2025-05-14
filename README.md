@@ -6,5 +6,5 @@ node task1/func/index.js
 ```
 
 ```bash
-node task1/oop.js
+node task1/oop/index.js
 ```

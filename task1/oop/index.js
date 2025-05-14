@@ -1,8 +1,7 @@
-const { calculatePercentageColumn, addRowToTable, removeRowFromTable, sortTable, drawTable } = require('./table');
-const { parseCsv } = require('./parse-csv');
 const { CellTransformOptions, PadType, SortBy } = require('./constants');
+const { TableDataset } = require('./table-dataset');
 
-const data = `city,population,area,density,country
+const csv = `city,population,area,density,country
   Shanghai,24256800,6340,3826,China
   Delhi,16787941,1484,11313,India
   Lagos,16060303,1171,13712,Nigeria
@@ -13,10 +12,11 @@ const data = `city,population,area,density,country
   London,8673713,1572,5431,United Kingdom
   New York City,8537673,784,10892,United States
   Bangkok,8280925,1569,5279,Thailand`;
+
 const tableConfig = {
     city: {
         type: 'string',
-        transformOptions: [
+        formatOptions: [
             {
                 type: CellTransformOptions.Pad,
                 settings: {
@@ -28,7 +28,7 @@ const tableConfig = {
     },
     population: {
         type: 'number',
-        transformOptions: [
+        formatOptions: [
             {
                 type: CellTransformOptions.Pad,
                 settings: {
@@ -40,7 +40,7 @@ const tableConfig = {
     },
     area: {
         type: 'number',
-        transformOptions: [
+        formatOptions: [
             {
                 type: CellTransformOptions.Pad,
                 settings: {
@@ -52,7 +52,7 @@ const tableConfig = {
     },
     density: {
         type: 'number',
-        transformOptions: [
+        formatOptions: [
             {
                 type: CellTransformOptions.Pad,
                 settings: {
@@ -64,7 +64,7 @@ const tableConfig = {
     },
     country: {
         type: 'string',
-        transformOptions: [
+        formatOptions: [
             {
                 type: CellTransformOptions.Pad,
                 settings: {
@@ -74,9 +74,18 @@ const tableConfig = {
             },
         ]
     },
-    'density percent': {
+};
+
+const tableDataset = new TableDataset();
+const table = tableDataset.createTable(csv, tableConfig, 'City population');
+const densityPercentage = table.calculatePercentage(3);
+const newRowOptions = {
+    index: 5,
+    name: 'density percent',
+    values: densityPercentage,
+    config: {
         type: 'number',
-        transformOptions: [
+        formatOptions: [
             {
                 type: CellTransformOptions.Pad,
                 settings: {
@@ -85,19 +94,11 @@ const tableConfig = {
                 }
             },
         ]
-    },
-
+    }
 };
-
-const table = parseCsv(data, tableConfig);
-const newRowValues = calculatePercentageColumn(table, 'density');
-const newRowOptions = {
-    columnIndex: 5,
-    columnName: 'density percent',
-    rowValues: newRowValues
-};
-const tableWithNewRow = addRowToTable(table, newRowOptions);
-const tableWithRemovedRow = removeRowFromTable(tableWithNewRow, 10);
-const sortedTable = sortTable(tableWithRemovedRow, 'density', SortBy.ASC);
-const tableToDraw = drawTable(sortedTable, tableConfig);
-console.log(tableToDraw);
+table.addColumn(newRowOptions);
+table.deleteRow(10);
+table.sortTable(5, SortBy.DESC);
+table.addCellFormating(2, 2, [{ type: CellTransformOptions.Color, settings: { color: '\x1b[31m' }}]);
+const output = table.drawTable();
+console.log(output)
