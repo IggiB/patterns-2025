@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Patterns 2025 Course",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {},
   "author": "IggiBi",
   "license": "MIT",
