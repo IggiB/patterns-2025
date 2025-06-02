@@ -15,15 +15,13 @@ const purchase = [
 
 const main = async () => {
     const em = new EventEmitter();
-    const goods = PurchaseIterator.create(purchase, em);
-    const basket = new Basket({ limit: 1050 }, em);
+    const goods = PurchaseIterator.create(purchase, () => em.emit('DONE'));
+    const basket = new Basket({ limit: 1050 });
+    em.on('DONE', () => basket.notifyResult());
 
     for await (const item of goods) {
         basket.add(item);
     }
-
-    await basket;
-    // basket.then(console.log)
 
     console.log('END');
 };

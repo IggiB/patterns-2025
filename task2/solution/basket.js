@@ -3,12 +3,9 @@ class Basket {
     #failedCases = [];
     #total = 0;
     #options;
-    #em;
 
-    constructor(options, em) {
+    constructor(options) {
         this.#options = options;
-        this.#em = em;
-        this.#em.on('DONE', () => this.#notifyResult());
     }
 
     add(item) {
@@ -27,11 +24,7 @@ class Basket {
         }
     }
 
-    then(onFulfilled, onRejected) {
-        return onFulfilled();
-    }
-
-    #notifyResult() {
+    notifyResult() {
         const result = {
             items: this.#items,
             total: this.#total,

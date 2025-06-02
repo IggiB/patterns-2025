@@ -1,15 +1,15 @@
 class PurchaseIterator {
     #current = 0;
     #purchase;
-    #em;
+    #onDone;
 
-    constructor(purchase, em) {
+    constructor(purchase, onDone) {
         this.#purchase = purchase;
-        this.#em = em;
+        this.#onDone = onDone;
     }
 
-    static create(purchase, em) {
-        return new PurchaseIterator(purchase, em);
+    static create(purchase, onDone) {
+        return new PurchaseIterator(purchase, onDone);
     }
 
     [Symbol.asyncIterator]() {
@@ -17,7 +17,7 @@ class PurchaseIterator {
             next: () => {
                 const isDone = this.#current >= this.#purchase.length;
                 if (isDone) {
-                    this.#em.emit('DONE');
+                    this.#onDone();
                 }
 
                 return {
