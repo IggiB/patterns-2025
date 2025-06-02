@@ -13,17 +13,18 @@ const purchase = [
 ];
 
 const main = async () => {
-    const promiseWithResolvers = Promise.withResolvers();
-    const goods = PurchaseIterator.create(purchase, promiseWithResolvers);
-    const basket = new Basket({ limit: 1050 }, promiseWithResolvers);
+    const goods = PurchaseIterator.create(purchase);
+    const basket = new Basket({ limit: 1050 });
+    basket
+        .then((res) => console.dir(res, { depth: null }), console.error)
+        .then(() => console.log('END 2'))
+        .then(() => console.log('END 3'))
 
     for await (const item of goods) {
         basket.add(item);
     }
 
-    await basket;
-    // basket.then(console.log)
-
+    basket.finalize();
     console.log('END');
 };
 

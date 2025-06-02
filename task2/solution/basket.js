@@ -3,11 +3,10 @@ class Basket {
     #failedCases = [];
     #total = 0;
     #options;
-    #promiseWithResolvers;
+    #callbacks = [];
 
-    constructor(options, promiseWithResolvers) {
+    constructor(options) {
         this.#options = options;
-        this.#promiseWithResolvers = promiseWithResolvers;
     }
 
     add(item) {
@@ -20,15 +19,28 @@ class Basket {
         }
     }
 
-    async then(onFulfilled, onRejected) {
-        await this.#promiseWithResolvers.promise;
-        const result = {
+    finalize() {
+        const initialResult = {
             items: this.#items,
             total: this.#total,
             failedCases: this.#failedCases
         };
-        console.log('Final basket result', result);
-        return onFulfilled(result);
+
+        let currentResult = initialResult;
+        for (const { onFulfilled, onRejected } of this.#callbacks) {
+            try {
+                currentResult = onFulfilled(currentResult);
+            } catch (error) {
+                currentResult = onRejected(error);
+                break;
+            }
+        }
+        return currentResult;
+    }
+
+    then(onFulfilled, onRejected) {
+        this.#callbacks.push({ onFulfilled, onRejected });
+        return this;
     }
 
     #addValidItem(total, item) {
