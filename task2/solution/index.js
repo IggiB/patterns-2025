@@ -19,6 +19,12 @@ const main = async () => {
         .then((res) => console.dir(res, { depth: null }), console.error)
         .then(() => console.log('END 2'))
         .then(() => console.log('END 3'))
+        .then()
+        .then()
+        .then()
+        .then()
+        .then()
+        .then(() => console.log('END 4'))
 
     for await (const item of goods) {
         basket.add(item);

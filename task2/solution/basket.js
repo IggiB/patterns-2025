@@ -20,21 +20,21 @@ class Basket {
     }
 
     finalize() {
-        const initialResult = {
+        let currentResult = {
             items: this.#items,
             total: this.#total,
             failedCases: this.#failedCases
         };
-
-        let currentResult = initialResult;
         for (const { onFulfilled, onRejected } of this.#callbacks) {
             try {
-                currentResult = onFulfilled(currentResult);
+                currentResult = onFulfilled ? onFulfilled(currentResult) : currentResult;
             } catch (error) {
-                currentResult = onRejected(error);
+                currentResult = onRejected ? onRejected(error) : error; //TODO THINK ABOUT REJECT CASES
                 break;
             }
         }
+        this.#callbacks = [];
+
         return currentResult;
     }
 
