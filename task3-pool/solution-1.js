@@ -9,7 +9,7 @@ const addInstance = (instances, options) => (instance) => {
 };
 
 const poolify = (factory, options) => {
-    const instances = Array.from({ length: options.size }, () => factory());
+    const instances = Array.from({ length: options.size }, factory);
 
     return {
         getInstance: getInstance(factory, instances),
