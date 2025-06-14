@@ -1,19 +1,19 @@
 'use strict';
 
-const getInstance = (factory, instances) => () => (instances.pop() ?? factory());
-const addInstance = (instances, options) => (instance) => {
-    if (instances.length < options.max) {
-        instances.push(instance);
-    }
-    return instance;
-};
-
 const poolify = (factory, options) => {
+    const getInstance = () => (instances.pop() ?? factory());
+    const addInstance = () => {
+        if (instances.length < options.max) {
+            instances.push(instance);
+        }
+        return instance;
+    };
+
     const instances = Array.from({ length: options.size }, factory);
 
     return {
-        getInstance: getInstance(factory, instances),
-        addInstance: addInstance(instances, options)
+        getInstance: getInstance,
+        addInstance: addInstance
     };
 };
 
