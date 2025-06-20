@@ -47,6 +47,7 @@ class Pool {
         if (this.#processing < this.#options.max) {
             const poolItem = this.#poolItems.find(instance => instance.isFree);
             poolItem.isFree = false;
+            this.#processing++;
             callback(poolItem.instance);
         } else {
             this.#delayedQueue.enqueue(callback);
